@@ -11,11 +11,10 @@ module ImageComparator
 	require './base'
 	require './image'
 
-	def self.compare(expected_path, test_path, mode = :rgb, threshold = 0.0)
+	def self.compare(expected_path, test_path, mode = :rgb)
 		raise ArgumentError.new("Undefined mode '#{ mode }'") unless MODES.include?(mode)
 		raise ArgumentError.new("Cannot load such file: '#{ expected_path }'") unless Pathname.new(expected_path).exist?
 		raise ArgumentError.new("Cannot load such file: '#{ test_path }'") unless Pathname.new(test_path).exist?
-		raise ArgumentError.new("'threshold' must be in [0, 1]") unless threshold.between?(0, 1)
 
 		klass = ImageComparator.const_get(MODES[mode])
 		expected = Image.from_file(expected_path)
@@ -29,5 +28,5 @@ module ImageComparator
 	end
 end
 
-res = ImageComparator.compare('./spec/fixtures/grayscale_a.png', './spec/fixtures/grayscale_b.png')
+res = ImageComparator.compare('./spec/fixturess/grayscale_a.png', './spec/fixtures/grayscale_b.png')
 res.save_difference_image './black.png'
