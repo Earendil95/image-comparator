@@ -13,7 +13,8 @@ module ImageComparator
 
       attr_accessor :diff, :score
 
-      def initialize(size, mode)
+      def initialize(expected, size, mode)
+        @expected = expected
         @score = 0.0
         @diff = Array.new
         @size = size
@@ -22,7 +23,7 @@ module ImageComparator
 
       def save_difference_image(path)
         make_path(path)
-        @mode.save_diff(@size, @diff, path)
+        @mode.save_diff(@expected, @size, @diff, path)
       end
 
       private 
@@ -37,13 +38,13 @@ module ImageComparator
     def initialize(expected, test)
       @expected = expected
       @test = test
-      @result = CompareResult.new({ width: @expected.width, height: @expected.height }, self.class)
+      @result = CompareResult.new(@expected, { width: @expected.width, height: @expected.height }, self.class)
     end
 
     def compare
       @test.compare_each_pixel(@expected) do |test_pixel, expected_pixel, x, y|
         next if pixels_equal?(test_pixel, expected_pixel)
-        @result.diff << [test_pixel, expected_pixel, x, y]
+        update_result(test_pixel, expected_pixel, x, y)
       end
 
       @result.score = score

@@ -31,5 +31,6 @@ module ImageComparator
   end
 end
 
-res = ImageComparator.compare('./spec/fixtures/a.png', './spec/fixtures/b.png')
+res = ImageComparator.compare('./spec/fixtures/a.png', './spec/fixtures/darker.png', :delta)
+p res.score
 res.save_difference_image './black.png'

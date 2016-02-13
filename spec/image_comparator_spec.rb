@@ -42,4 +42,27 @@ describe ImageComparator do
       end
     end
   end
+
+  describe 'Delta' do
+    subject { ImageComparator.compare(first_path, second_path, :delta) }
+
+    context "with similar images" do
+      it "score equals to 0.09413561679173654" do
+        expect(subject.score).to eq 0.09413561679173654
+      end
+    end
+
+    context "with different images" do
+      let(:second_path) { fixtures + "b.png"}
+
+      it "score equals to 0.019625652485167986" do
+        expect(subject.score).to eq 0.019625652485167986
+      end
+
+      it "saves correct difference image" do
+        subject.save_difference_image difference_path
+        expect(File.read(difference_path)).to eq(File.read(fixtures + "delta_diff.png"))
+      end
+    end 
+  end
 end

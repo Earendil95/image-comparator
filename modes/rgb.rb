@@ -8,7 +8,7 @@ module ImageComparator
       @result.diff.length * 1.0 / @expected.pixels.length
     end
 
-    def self.save_diff(size, diff, path)
+    def self.save_diff(expected, size, diff, path)
       diff_image = Image.new(size[:width], size[:height], BLACK)
       diff_image.render_bounds(diff)
       diff.each do |pixels_pair|
@@ -23,6 +23,10 @@ module ImageComparator
           (d.g(a) - d.g(b)).abs,
           (d.b(a) - d.b(b)).abs
         )
+    end
+
+    def update_result(a, b, x, y)
+      @result.diff << [a, b, x, y]
     end
   end
 end
