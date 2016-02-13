@@ -5,7 +5,7 @@ module ImageComparator
 		end
 
 		def score
-			@mismatch_count / @expected.pixels.length
+			@result.diff.length * 1.0 / @expected.pixels.length
 		end
 
 		def self.save_diff(size, diff, path)

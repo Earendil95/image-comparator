@@ -1,6 +1,9 @@
 require 'chunky_png'
 require 'pathname'
 
+class SizeMismatchError < RuntimeError
+end
+
 module ImageComparator
 	MODES = {
 		rgb: 'RGB',
@@ -13,20 +16,20 @@ module ImageComparator
 
 	def self.compare(expected_path, test_path, mode = :rgb)
 		raise ArgumentError.new("Undefined mode '#{ mode }'") unless MODES.include?(mode)
-		raise ArgumentError.new("Cannot load such file: '#{ expected_path }'") unless Pathname.new(expected_path).exist?
-		raise ArgumentError.new("Cannot load such file: '#{ test_path }'") unless Pathname.new(test_path).exist?
 
-		klass = ImageComparator.const_get(MODES[mode])
-		expected = Image.from_file(expected_path)
-		test = Image.from_file(test_path)
+		expected, test = Image.from_file(expected_path), Image.from_file(test_path)
 
-		raise "\nSize mismatch: expected size: #{ expected.width }x#{ expected.height }\n" \
-					"                   test size: #{ test.width }x#{ test.height }" unless expected.sizes_match?(test)
+		raise SizeMismatchError.new("\nSize mismatch: expected size: #{ expected.width }x#{ expected.height }\n" \
+																	"                   test size: #{ test.width }x#{ test.height }") unless expected.sizes_match?(test)
 
-		result = klass.new(expected, test)
+		result = comparison_mode(mode).new(expected, test)
 		result.compare
+	end
+
+	def self.comparison_mode(mode)
+		ImageComparator.const_get(MODES[mode])
 	end
 end
 
-res = ImageComparator.compare('./spec/fixturess/grayscale_a.png', './spec/fixtures/grayscale_b.png')
+res = ImageComparator.compare('./spec/fixtures/a.png', './spec/fixtures/b.png')
 res.save_difference_image './black.png'

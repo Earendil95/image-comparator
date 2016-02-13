@@ -41,11 +41,8 @@ module ImageComparator
 		end
 
 		def compare
-      @mismatch_count = 0.0
-
       @test.compare_each_pixel(@expected) do |test_pixel, expected_pixel, x, y|
         next if pixels_equal?(test_pixel, expected_pixel)
-        @mismatch_count += 1
         @result.diff << [test_pixel, expected_pixel, x, y]
       end
 
