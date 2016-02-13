@@ -1,4 +1,4 @@
 module ImageComparator
-	class Delta < Base
-	end
+  class Delta < Base
+  end
 end

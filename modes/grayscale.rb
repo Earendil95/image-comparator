@@ -1,4 +1,4 @@
 module ImageComparator
-	class Grayscale < Base
-	end
+  class Grayscale < Base
+  end
 end

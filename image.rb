@@ -1,8 +1,8 @@
 module ImageComparator
-	class Image < ChunkyPNG::Image
-		include ChunkyPNG::Color
+  class Image < ChunkyPNG::Image
+    include ChunkyPNG::Color
 
-		def each_pixel
+    def each_pixel
       height.times do |y|
         row(y).each_with_index do |pixel, x|
           yield(pixel, x, y)
@@ -34,49 +34,49 @@ module ImageComparator
     end
 
     def sizes_match?(image)
-    	[width, height] == [image.width, image.height]
+      [width, height] == [image.width, image.height]
     end
 
     def render_bounds(diff)
-    	left = xmin(diff) - 1
-    	right = xmax(diff) + 1
-    	top = ymax(diff) + 1
-    	bot = ymin(diff) - 1
-    	rect(left, bot, right, top, rgb(255, 0, 0))
+      left = xmin(diff) - 1
+      right = xmax(diff) + 1
+      top = ymax(diff) + 1
+      bot = ymin(diff) - 1
+      rect(left, bot, right, top, rgb(255, 0, 0))
     end
 
     private
 
     def xmin(diff)
-    	min = width + 1
-    	diff.each do |pixels_pair|
-    		min = pixels_pair[2] if pixels_pair[2] < min
-    	end
-    	min
+      min = width + 1
+      diff.each do |pixels_pair|
+        min = pixels_pair[2] if pixels_pair[2] < min
+      end
+      min
     end
 
     def xmax(diff)
-    	max = -1
-    	diff.each do |pixels_pair|
-    		max = pixels_pair[2] if pixels_pair[2] > max
-    	end
-    	max
+      max = -1
+      diff.each do |pixels_pair|
+        max = pixels_pair[2] if pixels_pair[2] > max
+      end
+      max
     end
 
     def ymin(diff)
-    	min = height + 1
-    	diff.each do |pixels_pair|
-    		min = pixels_pair[3] if pixels_pair[3] < min
-    	end
-    	min
+      min = height + 1
+      diff.each do |pixels_pair|
+        min = pixels_pair[3] if pixels_pair[3] < min
+      end
+      min
     end
 
     def ymax(diff)
-    	max = -1
-    	diff.each do |pixels_pair|
-    		max = pixels_pair[3] if pixels_pair[3] > max
-    	end
-    	max
+      max = -1
+      diff.each do |pixels_pair|
+        max = pixels_pair[3] if pixels_pair[3] > max
+      end
+      max
     end
-	end
+  end
 end
