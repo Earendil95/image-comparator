@@ -1,10 +1,18 @@
 module ImageComparator
+  module ColorMethods
+    include ChunkyPNG::Color
+
+    def brightness(a)
+      0.3 * r(a) + 0.59 * g(a) + 0.11 * b(a)
+    end
+  end
+
   class Base
     require './modes/rgb'
     require './modes/delta'
     require './modes/grayscale'
 
-    include ChunkyPNG::Color
+    include ColorMethods
 
     attr_reader :result
 
@@ -13,17 +21,16 @@ module ImageComparator
 
       attr_accessor :diff, :score
 
-      def initialize(expected, size, mode)
+      def initialize(expected, mode)
         @expected = expected
         @score = 0.0
         @diff = Array.new
-        @size = size
         @mode = mode
       end 
 
       def save_difference_image(path)
         make_path(path)
-        @mode.save_diff(@expected, @size, @diff, path)
+        @mode.save_diff(@expected, @diff, path)
       end
 
       private 
@@ -38,7 +45,7 @@ module ImageComparator
     def initialize(expected, test)
       @expected = expected
       @test = test
-      @result = CompareResult.new(@expected, { width: @expected.width, height: @expected.height }, self.class)
+      @result = CompareResult.new(@expected, self.class)
     end
 
     def compare

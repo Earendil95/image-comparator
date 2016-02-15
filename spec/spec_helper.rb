@@ -12,6 +12,6 @@ end
 
 RSpec.configure do |config|
   config.after(:suite) do
-    FileUtils.rm_rf __dir__ + '/tmp'
+    FileUtils.rm_rf __dir__ + '/tmp/spec'
   end
 end

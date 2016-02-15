@@ -1,6 +1,6 @@
 module ImageComparator
   class Image < ChunkyPNG::Image
-    include ChunkyPNG::Color
+    include ColorMethods
 
     def each_pixel
       height.times do |y|
@@ -77,10 +77,6 @@ module ImageComparator
         max = pixels_pair[3] if pixels_pair[3] > max
       end
       max
-    end
-
-    def brightness(a)
-      0.3 * r(a) + 0.59 * g(a) + 0.11 * b(a)
     end
   end
 end
